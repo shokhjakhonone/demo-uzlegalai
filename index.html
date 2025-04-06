@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UzLegalAI - Юридический AI-ассистент Узбекистана</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #b300ff;
+            --neon-pink: #ff00f7;
+            --dark-bg: #0a0a1a;
+            --light-text: #ffffff;
+            --accent: #4a00e0;
+            --law-ref: #00ffaa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at center, rgba(74,0,224,0.2) 0%, rgba(10,10,26,1) 70%);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,243,255,0.1) 0%, rgba(0,0,0,0) 70%);
+            animation: pulse 8s infinite alternate;
+            z-index: -1;
+        }
+        
+        .logo {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(179, 0, 255, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            max-width: 800px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
+        }
+        
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .cta-button:hover::after {
+            left: 100%;
+        }
+        
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background-color: rgba(10, 10, 26, 0.8);
+            position: relative;
+        }
+        
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Q50,80 0,100 Z" fill="%230a0a1a"/></svg>');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            padding: 30px;
+            background: rgba(74, 0, 224, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+            border-color: var(--neon-blue);
+        }
+        
+        .step-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: rgba(0, 243, 255, 0.3);
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--neon-blue);
+        }
+        
+        .step-description {
+            margin-bottom: 20px;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--neon-purple);
+        }
+        
+        /* Demo Animation */
+        .demo-container {
+            margin-top: 40px;
+            position: relative;
+            height: 600px;
+            background: rgba(10, 10, 26, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .demo-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            padding: 30px;
+        }
+        
+        .demo-screen.active {
+            opacity: 1;
+        }
+        
+        .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+        }
+        
+        .demo-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 20px;
+        }
+        
+        .chat-message {
+            max-width: 80%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            position: relative;
+            animation: fadeIn 0.5s ease;
+            line-height: 1.5;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-bottom-right-radius: 0;
+        }
+        
+        .ai-message {
+            align-self: flex-start;
+            background: rgba(179, 0, 255, 0.1);
+            border: 1px solid rgba(179, 0, 255, 0.3);
+            border-bottom-left-radius: 0;
+        }
+        
+        .law-reference {
+            color: var(--law-ref);
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 1px dashed var(--law-ref);
+            cursor: pointer;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-self: flex-start;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: rgba(179, 0, 255, 0.1);
+            border: 1px solid rgba(179, 0, 255, 0.3);
+            border-radius: 10px;
+            border-bottom-left-radius: 0;
+            width: fit-content;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 26, 0.8), rgba(74, 0, 224, 0.2));
+        }
+        
+        .feature-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .feature-card {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background: rgba(74, 0, 224, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+            border-color: var(--neon-blue);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,243,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--neon-purple);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--neon-blue);
+        }
+        
+        /* Examples Section */
+        .examples {
+            padding: 100px 0;
+            background: linear-gradient(to bottom, rgba(10,10,26,0.9), rgba(74,0,224,0.1));
+        }
+        
+        .example-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .example-tab {
+            padding: 10px 20px;
+            background: rgba(74, 0, 224, 0.2);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .example-tab.active {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        
+        .example-content {
+            background: rgba(10, 10, 26, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 300px;
+        }
+        
+        .example-question {
+            color: var(--neon-blue);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .example-answer {
+            border-left: 3px solid var(--neon-purple);
+            padding-left: 20px;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 80px 0 30px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(74,0,224,0.2), rgba(10,10,26,1));
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,100 L100,100 L100,0 Q50,20 0,0 Z" fill="%230a0a1a"/></svg>');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+        
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--neon-blue);
+        }
+        
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 50px;
+        }
+        
+        /* Animations */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(179, 0, 255, 0.3);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(179, 0, 255, 0.6), 0 0 30px rgba(0, 243, 255, 0.4);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0.5;
+            }
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .steps {
+                flex-direction: column;
+            }
+            
+            .step {
+                min-width: 100%;
+            }
+            
+            .demo-container {
+                height: 500px;
+            }
+            
+            .feature-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="logo">UzLegalAI</h1>
+            <p class="tagline">Прецизионный анализ законодательства Узбекистана с искусственным интеллектом. Точные ответы на юридические вопросы с ссылками на НПА.</p>
+            <a href="#demo" class="cta-button">Посмотреть демонстрацию</a>
+        </div>
+    </section>
+    
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="demo">
+        <div class="container">
+            <h2 class="section-title">Как работает UzLegalAI</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">💬</div>
+                    <h3 class="step-title">Задайте вопрос</h3>
+                    <p class="step-description">Сформулируйте ваш юридический вопрос на естественном языке, как если бы вы общались с живым юристом.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">🔍</div>
+                    <h3 class="step-title">Анализ законодательства</h3>
+                    <p class="step-description">Система анализирует тысячи нормативных актов и судебных решений, находя релевантную информацию.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">📝</div>
+                    <h3 class="step-title">Формирование ответа</h3>
+                    <p class="step-description">AI генерирует четкий, структурированный ответ со ссылками на конкретные статьи законов.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <div class="step-icon">✅</div>
+                    <h3 class="step-title">Получите результат</h3>
+                    <p class="step-description">Вы получаете точный юридический ответ, который можете использовать в своей работе.</p>
+                </div>
+            </div>
+            
+            <!-- Demo Animation -->
+            <div class="demo-container">
+                <div class="demo-screen active" id="demo1">
+                    <div class="demo-header">
+                        <div class="demo-title">Юридический консультант</div>
+                    </div>
+                    <div class="demo-content">
+                        <div class="chat-message ai-message">
+                            <strong>UzLegalAI:</strong> Здравствуйте! Я ваш AI-ассистент по законодательству Узбекистана. Задайте ваш юридический вопрос, и я предоставлю точный ответ с ссылками на нормативные акты.
+                        </div>
+                        <div class="chat-message user-message">
+                            <strong>Вы:</strong> Какие документы нужны для регистрации ООО в Ташкенте в 2023 году?
+                        </div>
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-screen" id="demo2">
+                    <div class="demo-header">
+                        <div class="demo-title">Юридический консультант</div>
+                    </div>
+                    <div class="demo-content">
+                        <div class="chat-message ai-message">
+                            <strong>UzLegalAI:</strong> Здравствуйте! Я ваш AI-ассистент по законодательству Узбекистана. Задайте ваш юридический вопрос, и я предоставлю точный ответ с ссылками на нормативные акты.
+                        </div>
+                        <div class="chat-message user-message">
+                            <strong>Вы:</strong> Какие документы нужны для регистрации ООО в Ташкенте в 2023 году?
+                        </div>
+                        <div class="chat-message ai-message">
+                            <strong>UzLegalAI:</strong> Для регистрации ООО в Ташкенте согласно <span class="law-reference">ст. 14 Закона РУз "О компаниях" (в ред. от 15.03.2022)</span> потребуются следующие документы:<br><br>
+                            1. Устав ООО (2 экземпляра)<br>
+                            2. Решение учредителя или протокол собрания учредителей<br>
+                            3. Заявление по форме РК-1<br>
+                            4. Квитанция об оплате госпошлины (0,5 МРЗП)<br>
+                            5. Копия паспорта директора<br><br>
+                            Полный перечень доступен на сайте <span class="law-reference">Министерства юстиции РУз</span>.
+                        </div>
+                        <div class="chat-message user-message">
+                            <strong>Вы:</strong> Какие требования к уставному капиталу для IT-компании?
+                        </div>
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-screen" id="demo3">
+                    <div class="demo-header">
+                        <div class="demo-title">Юридический консультант</div>
+                    </div>
+                    <div class="demo-content">
+                        <div class="chat-message ai-message">
+                            <strong>UzLegalAI:</strong> Здравствуйте! Я ваш AI-ассистент по законодательству Узбекистана. Задайте ваш юридический вопрос, и я предоставлю точный ответ с ссылками на нормативные акты.
+                        </div>
+                        <div class="chat-message user-message">
+                            <strong>Вы:</strong> Какие документы нужны для регистрации ООО в Ташкенте в 2023 году?
+                        </div>
+                        <div class="chat-message ai-message">
+                            <strong>UzLegalAI:</strong> Для регистрации ООО в Ташкенте согласно <span class="law-reference">ст. 14 Закона РУз "О компаниях" (в ред. от 15.03.2022)</span> потребуются следующие документы:<br><br>
+                            1. Устав ООО (2 экземпляра)<br>
+                            2. Решение учредителя или протокол собрания учредителей<br>
+                            3. Заявление по форме РК-1<br>
+                            4. Квитанция об оплате госпошлины (0,5 МРЗП)<br>
+                            5. Копия паспорта директора<br><br>
+                            Полный перечень доступен на сайте <span class="law-reference">Министерства юстиции РУз</span>.
+                        </div>
+                        <div class="chat-message user-message">
+                            <strong>Вы:</strong> Какие требования к уставному капиталу для IT-компании?
+                        </div>
+                        <div class="chat-message ai-message">
+                            <strong>UzLegalAI:</strong> Согласно <span class="law-reference">п. 2 ст. 61 Закона "О компаниях"</span>, минимальный уставный капитал для ООО составляет 400 МРЗП (около 12 млн сум).<br><br>
+                            Для IT-компаний согласно <span class="law-reference">Постановлению Президента РУз №ПП-4476 от 05.03.2021</span> действуют льготы:<br>
+                            - Упрощенная регистрация (3 дня)<br>
+                            - Возможность уменьшенного уставного капитала (100 МРЗП)<br>
+                            - Налоговые каникулы на 3 года<br><br>
+                            Подробнее: <span class="law-reference">www.lex.uz/ru/docs/5313575</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Ключевые возможности</h2>
+            
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="feature-icon">⚖️</div>
+                    <h3 class="feature-title">Точные ссылки на НПА</h3>
+                    <p class="feature-description">Все ответы содержат точные ссылки на статьи законов, постановлений и других нормативных актов с указанием редакции.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3 class="feature-title">Актуальные данные</h3>
+                    <p class="feature-description">Ежедневное обновление базы законодательства с учетом последних изменений.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3 class="feature-title">Связанные документы</h3>
+                    <p class="feature-description">Автоматический подбор связанных нормативных актов и судебных решений.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Анализ изменений</h3>
+                    <p class="feature-description">Сравнение разных редакций законов с выделением ключевых изменений.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3 class="feature-title">Шаблоны документов</h3>
+                    <p class="feature-description">Генерация юридических документов согласно требованиям законодательства РУз.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Мультиплатформенность</h3>
+                    <p class="feature-description">Доступ через веб-интерфейс, мобильное приложение и API для интеграции.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Examples Section -->
+    <section class="examples">
+        <div class="container">
+            <h2 class="section-title">Примеры запросов</h2>
+            
+            <div class="example-tabs">
+                <div class="example-tab active" data-tab="business">Для бизнеса</div>
+                <div class="example-tab" data-tab="tax">Налоговые вопросы</div>
+                <div class="example-tab" data-tab="labor">Трудовое право</div>
+                <div class="example-tab" data-tab="property">Недвижимость</div>
+            </div>
+            
+            <div class="example-content">
+                <div class="example-question">Какие льготы предусмотрены для IT-компаний в Узбекистане в 2023 году?</div>
+                <div class="example-answer">
+                    Согласно <span class="law-reference">Постановлению Президента РУз №ПП-4476 от 05.03.2021</span>, IT-компании имеют следующие льготы:<br><br>
+                    1. <strong>Налоговые каникулы</strong> на 3 года (освобождение от налога на прибыль, НДС, налога на имущество)<br>
+                    2. <strong>Упрощенная регистрация</strong> (3 рабочих дня)<br>
+                    3. <strong>Пониженный уставный капитал</strong> (100 МРЗП вместо 400)<br>
+                    4. <strong>Льготные тарифы</strong> на аренду государственной недвижимости<br><br>
+                    Подробнее: <span class="law-reference">www.lex.uz/ru/docs/5313575</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">UzLegalAI</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">О проекте</a>
+                <a href="#" class="footer-link">Тарифы</a>
+                <a href="#" class="footer-link">API для разработчиков</a>
+                <a href="#" class="footer-link">Партнерам</a>
+                <a href="#" class="footer-link">Контакты</a>
+            </div>
+            <p class="copyright">© 2023 UzLegalAI. Все права защищены.<br>Интеллектуальная система анализа законодательства Республики Узбекистан</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Demo Animation
+        let currentDemo = 1;
+        const totalDemos = 3;
+        
+        function cycleDemos() {
+            document.getElementById(`demo${currentDemo}`).classList.remove('active');
+            
+            currentDemo = currentDemo % totalDemos + 1;
+            
+            document.getElementById(`demo${currentDemo}`).classList.add('active');
+        }
+        
+        // Start cycling through demos
+        setInterval(cycleDemos, 8000);
+        
+        // Example tabs functionality
+        const tabs = document.querySelectorAll('.example-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update content based on tab
+                const tabId = tab.getAttribute('data-tab');
+                updateExampleContent(tabId);
+            });
+        });
+        
+        function updateExampleContent(tabId) {
+            const questionElement = document.querySelector('.example-question');
+            const answerElement = document.querySelector('.example-answer');
+            
+            const examples = {
+                business: {
+                    question: "Какой порядок регистрации товарного знака в Узбекистане?",
+                    answer: `Согласно <span class="law-reference">ст. 7 Закона РУз "О товарных знаках"</span>, регистрация включает следующие этапы:<br><br>
+                    1. Подача заявки в <span class="law-reference">Агентство по интеллектуальной собственности</span><br>
+                    2. Формальная экспертиза (15 дней)<br>
+                    3. Экспертиза по существу (6 месяцев)<br>
+                    4. Выдача свидетельства (30 дней после оплаты)<br><br>
+                    Госпошлина: 2 МРЗП за подачу + 10 МРЗП за регистрацию.<br>
+                    Подробнее: <span class="law-reference">www.lex.uz/ru/docs/1234567</span>`
+                },
+                tax: {
+                    question: "Какие налоговые ставки для ИП в 2023 году?",
+                    answer: `Согласно <span class="law-reference">Налоговому кодексу РУз (ст. 244-248)</span>:<br><br>
+                    <strong>Основные налоги для ИП:</strong><br>
+                    1. НДС - 15% (для некоторых товаров 0% или 5%)<br>
+                    2. Налог на прибыль - 15% (20% для банков)<br>
+                    3. Налог с оборота - 4% (для отдельных видов деятельности)<br>
+                    4. Социальный налог - 12%<br><br>
+                    Для ИП на упрощенной системе: единый налог 4-8% от оборота.<br>
+                    Актуальные ставки: <span class="law-reference">www.tax.gov.uz</span>`
+                },
+                labor: {
+                    question: "Какая продолжительность отпуска по трудовому кодексу РУз?",
+                    answer: `Согласно <span class="law-reference">ст. 154 Трудового кодекса РУз</span>:<br><br>
+                    <strong>Основной оплачиваемый отпуск</strong> - 24 рабочих дня (при 6-дневной рабочей неделе).<br><br>
+                    <strong>Дополнительные отпуска:</strong><br>
+                    1. За вредные условия труда - до 10 дней<br>
+                    2. За ненормированный рабочий день - до 5 дней<br>
+                    3. Для инвалидов - до 5 дней<br><br>
+                    Для отдельных категорий работников (учителя, медики) могут устанавливаться удлиненные отпуска.<br>
+                    Ссылка: <span class="law-reference">www.lex.uz/ru/docs/4032021</span>`
+                },
+                property: {
+                    question: "Какой налог на недвижимость для физических лиц?",
+                    answer: `Согласно <span class="law-reference">ст. 302 Налогового кодекса РУз</span>:<br><br>
+                    <strong>Налог на недвижимость:</strong><br>
+                    1. До 60 м² - не облагается<br>
+                    2. От 60 до 120 м² - 0,5% от инвентаризационной стоимости<br>
+                    3. Свыше 120 м² - 1% от инвентаризационной стоимости<br><br>
+                    <strong>Льготы:</strong><br>
+                    - Инвалиды I и II групп - 50% скидка<br>
+                    - Пенсионеры - освобождение от налога на 1 объект<br><br>
+                    Расчет производится органами ГНК.`
+                }
+            };
+            
+            questionElement.textContent = examples[tabId].question;
+            answerElement.innerHTML = examples[tabId].answer;
+        }
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.step, .feature-card').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
